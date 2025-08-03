@@ -6,7 +6,7 @@ from datetime import datetime
 
 app = FastAPI()
 
-# Variables de entorno (asegúrate de definir GITHUB_TOKEN en Render)
+# Variables de entorno
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_NAME = "Aidata777/render-image-converter"
 BRANCH = "main"
