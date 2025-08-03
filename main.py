@@ -36,3 +36,4 @@ async def convert(file: UploadFile = File(...)):
 
     url = f"https://aidata777.github.io/render-image-converter/{FOLDER}/{filename}"
     return {"url": url}
+
