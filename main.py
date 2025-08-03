@@ -1,39 +1,54 @@
 from fastapi import FastAPI, UploadFile, File
-from PIL import Image
-import io, os
+from fastapi.responses import JSONResponse
 from github import Github
+from PIL import Image
 from datetime import datetime
+import io
+import os
 
 app = FastAPI()
 
-# Variables de entorno
+# Configuración
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 REPO_NAME = "Aidata777/render-image-converter"
 BRANCH = "main"
 FOLDER = "images"
+USER = "Aidata777"
 
 @app.get("/")
 def home():
-    return {"status": "ok"}
+    return {"message": "Servicio activo"}
 
 @app.get("/ping")
 def ping():
     return {"status": "alive"}
 
-@app.post("/convert")
-async def convert(file: UploadFile = File(...)):
-    image = Image.open(io.BytesIO(await file.read())).convert("RGB")
-    output = io.BytesIO()
-    image.save(output, format="JPEG", quality=95)
-    output.seek(0)
+@app.post("/upload-image")
+async def upload_image(file: UploadFile = File(...)):
+    try:
+        # Leer y convertir la imagen a JPEG
+        image = Image.open(io.BytesIO(await file.read())).convert("RGB")
+        buffer = io.BytesIO()
+        image.save(buffer, format="JPEG", quality=95)
+        buffer.seek(0)
 
-    filename = f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.jpg"
+        # Crear nombre único
+        timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        filename = f"{timestamp}.jpg"
 
-    g = Github(GITHUB_TOKEN)
-    repo = g.get_repo(REPO_NAME)
-    content = output.read()
-    repo.create_file(f"{FOLDER}/{filename}", "add converted image", content, branch=BRANCH)
+        # Conectar con GitHub y subir imagen
+        github = Github(GITHUB_TOKEN)
+        repo = github.get_repo(REPO_NAME)
+        content = buffer.read()
 
-    url = f"https://aidata777.github.io/render-image-converter/{FOLDER}/{filename}"
-    return {"url": url}
+        path = f"{FOLDER}/{filename}"
+        repo.create_file(path, "add converted image", content, branch=BRANCH)
+
+        # Generar URL pública
+        public_url = f"https://{USER}.github.io/{REPO_NAME.split('/')[-1]}/{path}"
+
+        return {"url": public_url}
+    
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
