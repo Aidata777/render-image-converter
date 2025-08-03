@@ -71,6 +71,7 @@ async def upload_image(file: UploadFile = File(...)):
     content = output.read()
     repo.create_file(f"{FOLDER}/{filename}", "Upload image", content, branch=BRANCH)
 
-    url = f"https://aidata777.github.io/render-image-converter/{FOLDER}/{filename}"
-    return {"url": url}
+    from fastapi.responses import Response
+    return Response(content=url, media_type="text/plain")
+
 
