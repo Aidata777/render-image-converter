@@ -8,7 +8,7 @@ app = FastAPI()
 
 # Variables de entorno
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-REPO_NAME = "TU_USUARIO/TU_REPOSITORIO"
+REPO_NAME = "TU_USUARIO/TU_REPOSITORIO"  # <-- Reemplaza esto
 BRANCH = "main"
 FOLDER = "images"
 
@@ -35,4 +35,4 @@ async def convert(file: UploadFile = File(...)):
     repo.create_file(f"{FOLDER}/{filename}", "add converted image", content, branch=BRANCH)
 
     url = f"https://TU_USUARIO.github.io/TU_REPOSITORIO/{FOLDER}/{filename}"
-    return {"url": url}"
+    return {"url": url}
