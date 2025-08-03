@@ -1,5 +1,5 @@
 fastapi
-pillow
-python-multipart
-PyGithub
 uvicorn
+python-multipart
+pillow
+PyGithub
