@@ -6,9 +6,9 @@ from datetime import datetime
 
 app = FastAPI()
 
-# Variables de entorno
+# Variables de entorno (asegúrate de definir GITHUB_TOKEN en Render)
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-REPO_NAME = "TU_USUARIO/TU_REPOSITORIO"  # <-- Reemplaza esto
+REPO_NAME = "Aidata777/render-image-converter"
 BRANCH = "main"
 FOLDER = "images"
 
@@ -34,5 +34,5 @@ async def convert(file: UploadFile = File(...)):
     content = output.read()
     repo.create_file(f"{FOLDER}/{filename}", "add converted image", content, branch=BRANCH)
 
-    url = f"https://TU_USUARIO.github.io/TU_REPOSITORIO/{FOLDER}/{filename}"
+    url = f"https://aidata777.github.io/render-image-converter/{FOLDER}/{filename}"
     return {"url": url}
