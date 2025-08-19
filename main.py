@@ -70,5 +70,5 @@ async def upload_image(file: UploadFile = File(...)):
     repo.create_file(f"{FOLDER}/{filename}", "Upload image", content, branch=BRANCH)
 
     # Respuesta como texto plano (solo la URL)
-    url = f"https://aidata777.github.io/render-image-converter/{FOLDER}/{filename}"
+    url = f"https://aidata777.github.io/render-image-converter/blob/main/{FOLDER}/{filename}"
     return Response(content=url, media_type="text/plain")
